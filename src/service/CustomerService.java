@@ -6,13 +6,16 @@ import java.util.Collection;
 import java.util.HashMap;
 
 public class CustomerService {
-    private static final CustomerService instance = new CustomerService();
+    private static CustomerService instance = null;
     private HashMap<String, Customer> customers;
 
     private CustomerService() {
     }
 
-    public CustomerService getInstance() {
+    public static CustomerService getInstance() {
+        if (instance == null) {
+            instance = new CustomerService();
+        }
         return instance;
     }
 
