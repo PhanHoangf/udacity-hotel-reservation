@@ -4,7 +4,10 @@ import model.Customer;
 import model.IRoom;
 import model.Reservation;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
 
 public class ReservationService {
     Collection<Reservation> reservations = new ArrayList<Reservation>();
@@ -19,6 +22,10 @@ public class ReservationService {
             instance = new ReservationService();
         }
         return instance;
+    }
+
+    public Collection<IRoom> getRooms() {
+        return rooms.values();
     }
 
     public void addRoom(IRoom room) {
