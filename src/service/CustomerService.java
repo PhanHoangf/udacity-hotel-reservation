@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class CustomerService {
     private static CustomerService instance = null;
-    private HashMap<String, Customer> customers;
+    private final HashMap<String, Customer> customers = new HashMap<String, Customer>();
 
     private CustomerService() {
     }
@@ -20,15 +20,17 @@ public class CustomerService {
     }
 
     public void addCustomer(String email, String firstName, String lastName) {
-        String message = String.format("Adding customer with email: %s, firstName: %s, lastName: %s", email, firstName, lastName);
-        System.out.println(message);
-
         Customer newCustomer = new Customer(firstName, lastName, email);
         customers.put(email, newCustomer);
     }
 
     public Customer getCustomer(String customerEmail) {
-        return customers.get(customerEmail);
+        try {
+            return customers.get(customerEmail);
+        } catch (Exception ex) {
+            System.out.println("You don't have any reservations yet");
+            throw new IllegalArgumentException();
+        }
     }
 
     public Collection<Customer> getAllCustomers() {
