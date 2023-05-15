@@ -39,4 +39,19 @@ public class Room implements IRoom {
                 ", enumeration=" + enumeration +
                 '}';
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Room room = (Room) o;
+
+        return roomNumber.equals(room.roomNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return roomNumber.hashCode();
+    }
 }

@@ -4,10 +4,7 @@ import model.Customer;
 import model.IRoom;
 import model.Reservation;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 public class ReservationService {
     Collection<Reservation> reservations = new ArrayList<Reservation>();
@@ -38,6 +35,12 @@ public class ReservationService {
 
     public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
         Reservation reservation = new Reservation(customer, room, checkInDate, checkOutDate);
+        List<Reservation> bookedRoom = reservations.stream().filter(reservation1 -> Objects.equals(reservation.getRoom().getRoomNumber(), room.getRoomNumber())).toList();
+
+        if(bookedRoom.size() > 0) {
+            System.out.println("Room already");
+        }
+
         reservations.add(reservation);
         return reservation;
     }

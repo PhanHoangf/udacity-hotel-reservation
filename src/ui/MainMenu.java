@@ -94,6 +94,19 @@ public class MainMenu {
             for (IRoom room : rooms) {
                 System.out.println(room);
             }
+
+            System.out.println("Choose room no: ");
+            String userChooseRoom = input.nextLine();
+
+            System.out.println("Email: ");
+            String userEmail = input.nextLine();
+
+
+            IRoom room = hotelResource.getRoom(userChooseRoom);
+            Reservation reservation = hotelResource.bookARoom(userEmail, room, checkInDate, checkOutDate);
+
+            System.out.println("Reserve room successful: " + reservation);
+
         } else {
             System.out.println("Dont have any room yet");
         }
