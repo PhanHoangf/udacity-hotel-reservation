@@ -37,7 +37,7 @@ public class ReservationService {
         Reservation reservation = new Reservation(customer, room, checkInDate, checkOutDate);
         List<Reservation> bookedRoom = reservations.stream().filter(reservation1 -> Objects.equals(reservation.getRoom().getRoomNumber(), room.getRoomNumber())).toList();
 
-        if(bookedRoom.size() > 0) {
+        if (bookedRoom.size() > 0) {
             System.out.println("Room already");
         }
 
@@ -46,13 +46,24 @@ public class ReservationService {
     }
 
     public Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
-        Collection<IRoom> roomList = new ArrayList<IRoom>();
+        Collection<IRoom> availableRooms = new ArrayList<IRoom>();
+        List<String> unavailableRoomsNumber = new ArrayList<String>();
         for (Reservation re : reservations) {
-            if (re.getCheckInDate().equals(checkInDate) && re.getCheckOutDate().equals(checkOutDate)) {
-                roomList.add(re.getRoom());
+            if (re.getCheckInDate().before(checkInDate) && re.getCheckOutDate().after(checkOutDate)
+                    || re.getCheckInDate().after(checkInDate) && re.getCheckOutDate().after(checkOutDate)
+                    || re.getCheckInDate().before(checkInDate) && re.getCheckOutDate().before(checkOutDate)
+                    || re.getCheckInDate().after(checkInDate) && re.getCheckOutDate().before(checkOutDate)
+            ) {
+                String roomNumber = re.getRoom().getRoomNumber();
+                unavailableRoomsNumber.add(roomNumber);
             }
         }
-        return roomList;
+
+        for (IRoom room : rooms.values()) {
+            for (String roomNumber : unavailableRoomsNumber) {
+            }
+        }
+        return availableRooms;
     }
 
     public Collection<Reservation> getCustomersReservation(Customer customer) {

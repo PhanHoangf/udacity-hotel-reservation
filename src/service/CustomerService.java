@@ -20,8 +20,21 @@ public class CustomerService {
     }
 
     public void addCustomer(String email, String firstName, String lastName) {
-        Customer newCustomer = new Customer(firstName, lastName, email);
-        customers.put(email, newCustomer);
+        try {
+            Customer newCustomer = new Customer(firstName, lastName, email);
+            boolean existFlag = false;
+            for (Customer cus : customers.values()) {
+                if (cus.equals(newCustomer)) {
+                    existFlag = true;
+                    System.out.println("Email already exist, please use another email.");
+                }
+            }
+            if (!existFlag) {
+                customers.put(email, newCustomer);
+            }
+        } catch (IllegalArgumentException ex) {
+            System.out.println(ex.getLocalizedMessage());
+        }
     }
 
     public Customer getCustomer(String customerEmail) {

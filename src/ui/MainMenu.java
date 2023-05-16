@@ -28,20 +28,29 @@ public class MainMenu {
     }
 
     public static void generateMainMenu() throws ParseException {
-        System.out.println("//-------------------------------------//");
-        System.out.println("                                         ");
+        int userInput;
 
-        String option1 = "1. Find and reserve a room";
-        String option2 = "2. See my reservations";
-        String option3 = "3. Create an account";
-        String option4 = "4. Admin";
-        String option5 = "5. Exit";
-        String[] mainMenuOptions = new String[]{option1, option2, option3, option4, option5};
+        do {
 
-        for (String option : mainMenuOptions) {
-            System.out.println(option);
-        }
-        handleUserInputMainMenu(userInput());
+            System.out.println("//-------------------------------------//");
+            System.out.println("                                         ");
+
+            String option1 = "1. Find and reserve a room";
+            String option2 = "2. See my reservations";
+            String option3 = "3. Create an account";
+            String option4 = "4. Admin";
+            String option5 = "5. Exit";
+            String[] mainMenuOptions = new String[]{option1, option2, option3, option4, option5};
+
+            for (String option : mainMenuOptions) {
+                System.out.println(option);
+            }
+
+            userInput = userInput();
+            handleUserInputMainMenu(userInput);
+
+        } while (userInput != 5);
+
     }
 
     private static void seeMyReservations() {
@@ -74,7 +83,9 @@ public class MainMenu {
         hotelResource.CreateACustomer(email, firstName, lastName);
 
         Customer newCustomer = hotelResource.getCustomer(email);
-        System.out.println("Create successful: " + newCustomer);
+        if (newCustomer != null) {
+            System.out.println("Create successful: " + newCustomer);
+        }
     }
 
     private static void findAndReserveARoom() throws ParseException {
@@ -141,15 +152,12 @@ public class MainMenu {
         switch (input) {
             case 1:
                 findAndReserveARoom();
-                generateMainMenu();
                 break;
             case 2:
                 seeMyReservations();
-                generateMainMenu();
                 break;
             case 3:
                 createAccount();
-                generateMainMenu();
                 break;
             case 4:
                 generateAdminMenu();
@@ -158,7 +166,7 @@ public class MainMenu {
                 break;
             default:
                 System.out.println("Please choose options that are showed in the menu");
-                generateMainMenu();
+                break;
         }
     }
 }
