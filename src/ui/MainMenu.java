@@ -19,8 +19,26 @@ public class MainMenu {
     }
 
     public static void main (String[] args) throws ParseException {
+        initTestData();
         generateMainMenu();
         System.out.println( "//-------------------------------------//" );
+    }
+
+    private static void initTestData () throws ParseException {
+        System.out.println("OUT OUT");
+        Customer customer = new Customer( "Phan", "Hoang", "hoang@gmail.com" );
+        Room room = new Room( "1", 1.5, RoomType.DOUBLE );
+        Date checkInDate = new SimpleDateFormat( "MM/dd/yyyy" ).parse( "5/20/2023" );
+        Date checkOutDate = new SimpleDateFormat( "MM/dd/yyyy" ).parse( "5/23/2023" );
+
+        List<IRoom> rooms = new ArrayList<>();
+        rooms.add( room );
+
+        hotelResource.CreateACustomer( customer.getEmail(), customer.getFirstName(), customer.getLastName() );
+        adminResource.addRoom( rooms );
+        hotelResource.bookARoom( customer.getEmail(), room, checkInDate, checkOutDate );
+
+        Reservation reservation = new Reservation( customer, room, checkInDate, checkOutDate );
     }
 
     public static void generateMainMenu () throws ParseException {
