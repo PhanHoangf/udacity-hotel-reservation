@@ -41,7 +41,7 @@ public class CustomerService {
         try {
             return customers.get(customerEmail);
         } catch (Exception ex) {
-            System.out.println("You don't have any reservations yet");
+            System.out.println("You don't have account yet");
             throw new IllegalArgumentException();
         }
     }
