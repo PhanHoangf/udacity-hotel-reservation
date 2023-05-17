@@ -10,7 +10,6 @@ import java.util.*;
 
 public class MainMenu {
     private static boolean isAdminMenu = false;
-    private static String option;
     private static final HotelResource hotelResource = HotelResource.getInstance();
     private static final AdminResource adminResource = AdminResource.getInstance();
 
@@ -25,7 +24,7 @@ public class MainMenu {
     }
 
     private static void initTestData () throws ParseException {
-        System.out.println("OUT OUT");
+        System.out.println( "OUT OUT" );
         Customer customer = new Customer( "Phan", "Hoang", "hoang@gmail.com" );
         Room room = new Room( "1", 1.5, RoomType.DOUBLE );
         Date checkInDate = new SimpleDateFormat( "MM/dd/yyyy" ).parse( "5/20/2023" );
@@ -37,8 +36,6 @@ public class MainMenu {
         hotelResource.CreateACustomer( customer.getEmail(), customer.getFirstName(), customer.getLastName() );
         adminResource.addRoom( rooms );
         hotelResource.bookARoom( customer.getEmail(), room, checkInDate, checkOutDate );
-
-        Reservation reservation = new Reservation( customer, room, checkInDate, checkOutDate );
     }
 
     public static void generateMainMenu () throws ParseException {
@@ -115,7 +112,7 @@ public class MainMenu {
 
 
         Collection<IRoom> rooms = hotelResource.findARoom( checkInDate, checkOutDate );
-        Collection<IRoom> recommendedRoom = new ArrayList<IRoom>();
+        Collection<IRoom> recommendedRoom = new ArrayList<>();
 
         if ( rooms.size() == 0 ) {
             System.out.println( "No room between your checkin and check out date" );
@@ -123,13 +120,13 @@ public class MainMenu {
             calendar.setTime( checkInDate );
 
             int recommendedCiDate = calendar.get( Calendar.DATE ) + 7;
-            String strRecommendCheckInDate = Integer.toString( calendar.get( Calendar.MONTH ) ) + "/" + Integer.toString( recommendedCiDate ) + "/" + Integer.toString( calendar.get( Calendar.YEAR ) );
+            String strRecommendCheckInDate = calendar.get( Calendar.MONTH ) + "/" + recommendedCiDate + "/" + calendar.get( Calendar.YEAR );
             Date recommendCheckInDate = new SimpleDateFormat( "MM/dd/yyyy" ).parse( strRecommendCheckInDate );
 
             calendar.setTime( checkOutDate );
 
             int recommendedCoDate = calendar.get( Calendar.DATE ) + 7;
-            String strRecommendCheckOutDate = Integer.toString( calendar.get( Calendar.MONTH ) ) + "/" + Integer.toString( recommendedCoDate ) + "/" + Integer.toString( calendar.get( Calendar.YEAR ) );
+            String strRecommendCheckOutDate = calendar.get( Calendar.MONTH ) + "/" + recommendedCoDate + "/" + calendar.get( Calendar.YEAR );
             Date recommendCheckOutDate = new SimpleDateFormat( "MM/dd/yyyy" ).parse( strRecommendCheckOutDate );
 
             recommendedRoom = hotelResource.findARoom( recommendCheckInDate, recommendCheckOutDate );
@@ -230,9 +227,7 @@ public class MainMenu {
                 case 1 -> getAllCustomers();
                 case 2 -> getAllRooms();
                 case 3 -> getAllReservation();
-                case 4 -> {
-                    getAllReservation();
-                }
+                case 4 -> addRoom();
                 case 5 -> {
                     setAdminMenu( false );
                     generateMainMenu();
@@ -299,7 +294,7 @@ public class MainMenu {
 
         Room newRoom = new Room( roomNumber, Double.parseDouble( roomPrice ), RoomType.DOUBLE );
 
-        List<IRoom> roomList = new ArrayList<IRoom>();
+        List<IRoom> roomList = new ArrayList<>();
         roomList.add( newRoom );
 
         adminResource.addRoom( roomList );
