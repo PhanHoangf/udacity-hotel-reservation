@@ -39,6 +39,14 @@ public class HotelResource {
 
     public Reservation bookARoom(String customerEmail, IRoom room, Date checkInDate, Date checkOutDate) {
         Customer customer = customerService.getCustomer(customerEmail);
+        Collection<Reservation> reservations = reservationService.getCustomersReservation(customer);
+
+        for (Reservation reservation : reservations) {
+            if (reservation.getRoom().equals(room) && reservation.getCustomer().equals(customer) && reservation.getCheckInDate().equals(checkInDate) && reservation.getCheckOutDate().equals(checkOutDate)) {
+                return null;
+            }
+        }
+
         return reservationService.reserveARoom(customer, room, checkInDate, checkOutDate);
     }
 

@@ -20,21 +20,33 @@ public class HotelApplication {
     public static void main(String[] args) throws ParseException {
         initTestData();
 
-        mainMenuLoop();
-        adminMenuLoop();
+        try {
+            do {
+//          FIRST INIT
+                mainMenuLoop();
+                adminMenuLoop();
+                System.out.println("//-------------------------------------//");
 
-        System.out.println("//-------------------------------------//");
+            } while (userInput != 5 && !isAdminMenu && userInput != 4);
+        } catch (ParseException ex) {
+            System.out.println(ex.getLocalizedMessage());
+        }
+
+
     }
 
     private static void mainMenuLoop() throws ParseException {
         do {
 //          FIRST INIT
-            generateMainMenu();
-
-            userInput = userInput();
-            handleUserInputMainMenu(userInput);
-
+            try {
+                generateMainMenu();
+                userInput = userInput();
+                handleUserInputMainMenu(userInput);
+            } catch (NumberFormatException ex) {
+                System.out.println("Invalid " + ex.getLocalizedMessage());
+            }
         } while (userInput != 5 && !isAdminMenu && userInput != 4);
+
     }
 
     private static void adminMenuLoop() throws ParseException {
@@ -62,7 +74,11 @@ public class HotelApplication {
 
         hotelResource.CreateACustomer(customer.getEmail(), customer.getFirstName(), customer.getLastName());
         adminResource.addRoom(rooms);
-        hotelResource.bookARoom(customer.getEmail(), room, checkInDate, checkOutDate);
+        Reservation reservation = hotelResource.bookARoom(customer.getEmail(), room, checkInDate, checkOutDate);
+
+        if (reservation == null) {
+            System.out.println("You already booked this room");
+        }
     }
 
     public static void generateMainMenu() throws ParseException {
@@ -142,7 +158,7 @@ public class HotelApplication {
                 System.out.println("Date check out(MM/dd/yyyy): ");
                 strDateCheckout = input.nextLine();
                 checkOutDate = new SimpleDateFormat("MM/dd/yyyy").parse(strDateCheckout);
-            } while (calendar.getTime().before(checkOutDate));
+            } while (calendar.getTime().after(checkOutDate));
 
             Collection<IRoom> rooms = hotelResource.findARoom(checkInDate, checkOutDate);
             Collection<IRoom> recommendedRoom;
@@ -228,10 +244,9 @@ public class HotelApplication {
         return userEmail;
     }
 
-    private static Integer userInput() {
+    private static Integer userInput() throws ParseException {
         Scanner userChoice = new Scanner(System.in);
         System.out.println("Choose option:");
-
         return Integer.parseInt(userChoice.nextLine());
     }
 
@@ -334,7 +349,7 @@ public class HotelApplication {
 
         try {
             if (free) {
-                newRoom = new FreeRoom(roomNumber, 0.0, type);
+                newRoom = new FreeRoom(roomNumber, type);
             } else {
                 System.out.println("Input room price: ");
                 roomPrice = input.nextLine();
